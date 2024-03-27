@@ -22,9 +22,10 @@ void AudioreactivePresenceUsermod::setup()
   _lcdDisplay.init();
   //_temperatureManager.init();
   // currentState = nullptr;
-  currentState = optionsMenu[4].state;
+  DEBUG_PRINTLN("default mode is "+String(DefaultMode));
+  currentState = optionsMenu[DefaultMode].state;
   //currentState->enterState();
-  //transitionToState(optionsMenu[1].state);
+  //transitionToState(currentState);
 }
 
 void AudioreactivePresenceUsermod::loop()
@@ -145,6 +146,12 @@ void onAlexaMessage(EspalexaDevice *dev)
   }
 }
 
+TemperatureData AudioreactivePresenceUsermod::readDhtSensor(){
+  _temperatureManager.update();
+  return _temperatureManager.data;
+}
+
+
 void AudioreactivePresenceUsermod::setMode(const String& modeName){
    
   OptionMenu* requestOption = _menuManager.gotoOption(modeName);
@@ -200,11 +207,67 @@ bool AudioreactivePresenceUsermod::onMqttMessage(char *topic, char *payload)
   }
   return true;
 }
-TemperatureData AudioreactivePresenceUsermod::readDhtSensor(){
-  _temperatureManager.update();
-  return _temperatureManager.data;
-}
 
+
+    void AudioreactivePresenceUsermod::appendConfigData()
+    {
+      Serial.println("Enter user mode settings");
+      
+      
+      oappend(SET_F("dd=addDropdown('SOLEGAG','config:defaultmode');"));
+      oappend(SET_F("addOption(dd,'Off',0);"));
+      oappend(SET_F("addOption(dd,'Color',1);"));
+      oappend(SET_F("addOption(dd,'Audio',2);"));
+      oappend(SET_F("addOption(dd,'Detection',3);"));
+      oappend(SET_F("addOption(dd,'Minuteur',4);"));
+      oappend(SET_F("addOption(dd,'Temperature',5);"));
+
+      oappend(SET_F("addInfo('SOLEGAG:minuteur:duration',1,'<i>s &#x23F1;</i>');"));     // 0 is field type, 1 is actual field
+      oappend(SET_F("addInfo('SOLEGAG:minuteur:enable',1,'activer le son <i>&#x266A;</i>');"));     // 0 is field type, 1 is actual field
+
+      oappend(SET_F("addInfo('SOLEGAG:temperature:min',1,'<i> &#127777;</i>');"));     // 0 is field type, 1 is actual field
+      oappend(SET_F("addInfo('SOLEGAG:temperature:max',1,'<i> &#127777;</i>');"));     // 0 is field type, 1 is actual field
+      oappend(SET_F("addInfo('SOLEGAG:temperature:brightness',1,'luminosité');"));     // 0 is field type, 1 is actual field
+
+    }
+void AudioreactivePresenceUsermod::addToConfig(JsonObject& root)
+    {
+      JsonObject top = root.createNestedObject(FPSTR(_name));
+
+      JsonObject configNode = top.createNestedObject("config");
+      configNode["defaultmode"] = DefaultMode;
+
+      JsonObject minuteurNode = top.createNestedObject("minuteur");
+      minuteurNode[FPSTR(_minuteurDurationInSeconds)] = MinuteurDurationInSeconds;
+      minuteurNode[FPSTR(_minuteurEnableSound)] = MinuteurEnableSound;
+      
+      JsonObject temperatureNode = top.createNestedObject("temperature");
+      temperatureNode[FPSTR(_temperatureMin)] = TemperatureMin;
+      temperatureNode[FPSTR(_temperatureMax)] = TemperatureMax;
+      temperatureNode[FPSTR(_temperatureEffectBrightness)] = TemperatureEffectBrightness;
+
+       DEBUG_PRINTLN(F("Solegag config saved."));
+    }
+bool AudioreactivePresenceUsermod::readFromConfig(JsonObject& root)
+    {
+      // default settings values could be set here (or below using the 3-argument getJsonValue()) instead of in the class definition or constructor
+      // setting them inside readFromConfig() is slightly more robust, handling the rare but plausible use case of single value being missing after boot (e.g. if the cfg.json was manually edited and a value was removed)
+JsonObject top = root[FPSTR(_name)];
+  if (top.isNull()) {
+    DEBUG_PRINTLN(F(": No config found. (Using defaults.)"));
+    return false;
+  }
+      Serial.println("read from config");
+
+
+      MinuteurDurationInSeconds = top["minuteur"][FPSTR(_minuteurDurationInSeconds)] | MinuteurDurationInSeconds;
+      MinuteurEnableSound = top["minuteur"][FPSTR(_minuteurEnableSound)] | MinuteurEnableSound;
+      TemperatureMin = top["temperature"][FPSTR(_temperatureMin)] | TemperatureMin;
+      TemperatureMax = top["temperature"][FPSTR(_temperatureMax)] | TemperatureMax;
+      TemperatureEffectBrightness = top["temperature"][FPSTR(_temperatureEffectBrightness)] | TemperatureEffectBrightness;
+      DefaultMode = top["config"]["defaultmode"] | DefaultMode;
+      return true;
+    }
 
 
 //const char AudioreactivePresenceUsermod::_data_FX_MODE_CHRONOMETRE[] PROGMEM = "chrono@!;!,!;!;01";

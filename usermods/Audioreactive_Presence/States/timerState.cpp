@@ -8,7 +8,7 @@ int lastTime;
 uint16_t mode_chronometre(void)
 {
   uint32_t tempsEcoule = strip.now; // Temps écoulé en millisecondes
-
+  Serial.println("minuteur: " + String(SEGLEN));
   if (SEGMENT.speed == 0)
     SEGMENT.speed = 60;
   if (tempsEcoule < SEGMENT.speed * 1000)
@@ -70,7 +70,7 @@ void timerState::enterState() {
         this->onTimer();
     });
     strip.addEffect(FX_MODE_CHRONOMETRE, &mode_chronometre, _data_FX_MODE_CHRONOMETRE);
-    strip.getMainSegment().speed = 30;
+    strip.getMainSegment().speed = usermodPtr->MinuteurDurationInSeconds;
     strip.getMainSegment().on = true;
     strip.setBrightness(255);
     resetTimebase();

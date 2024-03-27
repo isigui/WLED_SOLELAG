@@ -244,6 +244,9 @@ void registerUsermods()
    * \/ \/ \/
    */
   //usermods.add(new MyExampleUsermod());
+  #ifdef USERMOD_SOLEGAG
+  usermods.add(new AudioreactivePresenceUsermod());
+  #endif
   #ifdef USERMOD_BATTERY
   usermods.add(new UsermodBattery());
   #endif
