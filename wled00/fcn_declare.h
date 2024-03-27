@@ -12,7 +12,7 @@ void alexaInit();
 void handleAlexa();
 void onAlexaChange(EspalexaDevice* dev);
 #endif
-
+void onAlexaMessage(EspalexaDevice* dev);
 //button.cpp
 void shortPressAction(uint8_t b=0);
 void longPressAction(uint8_t b=0);

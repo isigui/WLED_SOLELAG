@@ -1,4 +1,5 @@
 #include "wled.h"
+#include "fcn_declare.h"
 
 /*
  * Alexa Voice On/Off/Brightness/Color Control. Emulates a Philips Hue bridge to Alexa.
@@ -132,6 +133,7 @@ void onAlexaChange(EspalexaDevice* dev)
       strip.setColor(0, color);
     }
     stateUpdated(CALL_MODE_ALEXA);
+    onAlexaMessage(dev);
   }
 }
 

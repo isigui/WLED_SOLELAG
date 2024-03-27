@@ -10,6 +10,38 @@
  * \/ \/ \/
  */
 //#include "../usermods/EXAMPLE_v2/usermod_v2_example.h"
+#ifdef USERMOD_SOLEGAG
+#include "../usermods/Audioreactive_Presence/Audioreactive_Presence.h"
+#include "../usermods/Audioreactive_Presence/Audioreactive_Presence.cpp"
+#include "../usermods/Audioreactive_Presence/buttonManager.h"
+#include "../usermods/Audioreactive_Presence/buttonManager.cpp"
+#include "../usermods/Audioreactive_Presence/lcdDisplay.h"
+#include "../usermods/Audioreactive_Presence/lcdDisplay.cpp"
+#include "../usermods/Audioreactive_Presence/logger.h"
+#include "../usermods/Audioreactive_Presence/logger.cpp"
+#include "../usermods/Audioreactive_Presence/menuManager.h"
+#include "../usermods/Audioreactive_Presence/menuManager.cpp"
+#include "../usermods/Audioreactive_Presence/optionMenu.h"
+#include "../usermods/Audioreactive_Presence/temperatureManager.h"
+#include "../usermods/Audioreactive_Presence/temperatureManager.cpp"
+
+#include "../usermods/Audioreactive_Presence/States/presenceStateBase.h"
+#include "../usermods/Audioreactive_Presence/States/presenceStateBase.cpp"
+#include "../usermods/Audioreactive_Presence/States/audioState.h"
+#include "../usermods/Audioreactive_Presence/States/audioState.cpp"
+#include "../usermods/Audioreactive_Presence/States/detectionState.h"
+#include "../usermods/Audioreactive_Presence/States/detectionState.cpp"
+#include "../usermods/Audioreactive_Presence/States/colorState.h"
+#include "../usermods/Audioreactive_Presence/States/colorState.cpp"
+#include "../usermods/Audioreactive_Presence/States/offState.h"
+#include "../usermods/Audioreactive_Presence/States/offState.cpp"
+#include "../usermods/Audioreactive_Presence/States/timerState.h"
+#include "../usermods/Audioreactive_Presence/States/timerState.cpp"
+#include "../usermods/Audioreactive_Presence/States/temperatureState.h"
+#include "../usermods/Audioreactive_Presence/States/temperatureState.cpp"
+#include "HTTPClient.h"
+
+#endif
 
 #ifdef USERMOD_BATTERY
   #include "../usermods/Battery/usermod_v2_Battery.h"

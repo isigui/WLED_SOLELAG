@@ -5,7 +5,49 @@
 # Please visit documentation: https://docs.platformio.org/page/projectconf.html
 
 [platformio]
-default_envs = WLED_tasmota_1M
+default_envs = WLED_solegag
+
+
+[env:WLED_solegag]
+board = lolin_s2_mini
+board_build.flash_mode = qio
+platform = espressif32@5.3.0
+#debug_tool = cmsis-dap
+#debug_build_flags = -Os
+#upload_protocol = cmsis-dap
+upload_speed = 921600
+upload_flags =
+build_unflags = ${common.build_unflags}
+build_flags = ${common.build_flags_esp32}
+   -DARDUINO_ARCH_ESP32
+   -DARDUINO_ARCH_ESP32S2
+   -DCONFIG_IDF_TARGET_ESP32S2=1
+   -D CONFIG_ASYNC_TCP_USE_WDT=0
+   -DARDUINO_USB_MSC_ON_BOOT=0 -DARDUINO_USB_DFU_ON_BOOT=0
+   -DCO
+   -DARDUINO_USB_MODE=0 
+   -D WLED_DISABLE_LOXONE
+   -D WLED_DISABLE_BLINK
+   -D IR_ENABLE_DEFAULT=false
+   -D WLED_RELEASE_NAME=solegag
+   -D SERVERNAME="\"solegag\""
+   -D LEDPIN=2
+   -D AUDIOPIN=12
+   -D BTNPIN=0
+   -D USERMOD_AUDIOREACTIVE
+   -D UM_AUDIOREACTIVE_USE_NEW_FFT
+   -D SR_DMTYPE=0
+   -D DMENABLED=1
+   -D USERMOD_SOLEGAG
+lib_deps = ${esp32.lib_deps}
+   LiquidCrystal_I2C_ESP32
+   https://github.com/kosme/arduinoFFT#develop @ ^1.9.2
+   https://github.com/pbolduc/AsyncTCP.git @ 1.2.0
+	paulstoffregen/OneWire @ 2.3.8
+	milesburton/DallasTemperature @ 3.11.0
+board_build.partitions = ${esp32.default_partitions}
+
+
 
 [env:WLED_tasmota_1M]
 board = esp01_1m
