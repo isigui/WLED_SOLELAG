@@ -17,6 +17,7 @@ private:
     unsigned long lastActionTime;
     int lastPreset;
     unsigned long presetDuration;
+    String _topic;
     void apiCall(DynamicJsonDocument jsonBody);
 };
 

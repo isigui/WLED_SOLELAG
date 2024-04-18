@@ -4,10 +4,10 @@
 // #include <AsyncTCP.h>
 // #include <ESPAsyncWebServer.h>
 #include "HTTPClient.h"
-
 detectionState::detectionState(AudioreactivePresenceUsermod *usermod) : presenceStateBase(usermod) {}
 void detectionState::enterState()
 {
+  _topic = (String(mqttDeviceTopic) + "/detection");
   usermodPtr->_logger.Log("enter detection state");
   usermodPtr->_lcdDisplay.print(usermodPtr->activeMenu->texte, 0, 0);
   lastPreset = 4;
@@ -17,9 +17,9 @@ void detectionState::enterState()
   // mqtt->connect();
   if (mqtt != nullptr)
   {
-    String topic = String(mqttDeviceTopic) + "/detection";
-    mqtt->subscribe(topic.c_str(), 0);
-    usermodPtr->_logger.Log(("subscribe to mqtt topic" + topic).c_str());
+    //String topic = String(mqttDeviceTopic) + "/detection";
+    mqtt->subscribe(_topic.c_str(), 0);
+    usermodPtr->_logger.Log(("subscribe to mqtt topic" + _topic).c_str());
   }
 
   // Logique d'entrée pour l'état detection
@@ -28,19 +28,21 @@ void detectionState::enterState()
 void detectionState::exitState()
 {
   usermodPtr->_logger.Log("exit detection state");
-  String topic = String(mqttDeviceTopic) + "/detection";
-  mqtt->unsubscribe(topic.c_str());
+  //String topic = String(mqttDeviceTopic) + "/detection";
+  mqtt->unsubscribe(_topic.c_str());
 }
 
 void detectionState::onMqttConnect(bool sessionPresent)
 {
   usermodPtr->_logger.Log("detectionState mqtt connected");
-  String topic = String(mqttDeviceTopic) + "/detection";
-  mqtt->subscribe(topic.c_str(), 0);
-  usermodPtr->_logger.Log(("subscribe to mqtt topic" + topic).c_str());
+  //String topic = String(mqttDeviceTopic) + "/detection";
+  mqtt->subscribe(_topic.c_str(), 0);
+  usermodPtr->_logger.Log(("subscribe to mqtt topic" + _topic).c_str());
 }
 bool detectionState::onMqttMessage(char *topic, char *payload)
 {
+  if(topic != _topic.c_str())
+    return true;
   unsigned long currentTime = millis();
   if (currentTime - lastActionTime < presetDuration)
   {

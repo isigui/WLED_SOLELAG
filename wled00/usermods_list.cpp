@@ -24,6 +24,8 @@
 #include "../usermods/Audioreactive_Presence/optionMenu.h"
 #include "../usermods/Audioreactive_Presence/temperatureManager.h"
 #include "../usermods/Audioreactive_Presence/temperatureManager.cpp"
+#include "../usermods/Audioreactive_Presence/soundManager.h"
+#include "../usermods/Audioreactive_Presence/soundManager.cpp"
 
 #include "../usermods/Audioreactive_Presence/States/presenceStateBase.h"
 #include "../usermods/Audioreactive_Presence/States/presenceStateBase.cpp"

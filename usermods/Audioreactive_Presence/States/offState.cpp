@@ -7,7 +7,13 @@ offState::offState(AudioreactivePresenceUsermod* usermod): presenceStateBase(use
 void offState::enterState() {
     usermodPtr->_logger.Log("enter off state");
     usermodPtr->_lcdDisplay.print(usermodPtr->activeMenu->texte,0,0);
-    applyPreset(4,CALL_MODE_DIRECT_CHANGE);
+
+
+
+
+
+    applyPreset(1,CALL_MODE_DIRECT_CHANGE);
+
     // Logique d'entrée pour l'état Off
 }
 
@@ -18,4 +24,5 @@ void offState::exitState() {
 
 void offState::update() {
     // Logique de mise à jour pour l'état Off
+
 }

@@ -8,6 +8,7 @@
 #include "optionMenu.h"
 #include "menuManager.h"
 #include "temperatureManager.h"
+#include "soundManager.h"
 #include "States/offState.h"
 #include "States/detectionState.h"
 #include "States/colorState.h"
@@ -39,12 +40,25 @@ private:
   static const char _temperatureMin[];
   static const char _temperatureMax[];
   static const char _temperatureEffectBrightness[];
-      
-  
+  void initializeHAMqtt();
+  bool mqttInitialized = false;
+  //String mqttCurrentModeTopic = "";
+  String mqttTemperatureTopic = "";
+  String mqttMinuteurTopic = "";
+  String mqttModeSelectTopic = "";
+  void publishHAMqttSensor(
+      const String &name, 
+      const String &friendly_name, 
+      const String &state_topic, 
+      const String &deviceClass, 
+      const String &unitOfMeasurement);     
+  void publishHAInputSelect(const String &name, 
+      const String &friendly_name, 
+      const String &state_topic);
   //static std::function<void()> timerEvent;
 public:
 
-  uint8_t MinuteurDurationInSeconds = 25;
+  uint8_t MinuteurDurationInSeconds = 120;
   bool MinuteurEnableSound = true;
   uint8_t DefaultMode = 0;
   float TemperatureMin = 17.0;
@@ -55,6 +69,7 @@ public:
   Logger _logger;
   OptionMenu *activeMenu;
   TemperatureManager _temperatureManager;
+  SoundManager _soundManager;
   AudioreactivePresenceUsermod();
   ~AudioreactivePresenceUsermod() {}
   void setup();
@@ -63,11 +78,16 @@ public:
   bool onMqttMessage(char* topic, char* payload);
   void transitionToState(presenceStateBase* newState);
   void setMode(const String& modeName);
+  TemperatureManager* getTemperatureManager(){return &_temperatureManager;}
   TemperatureData readDhtSensor();
   void appendConfigData();
   void addToConfig(JsonObject& root);
   bool readFromConfig(JsonObject& root);
- 
+
+  void publishHACurrentMode();
+  void publishHATemperature();
+  void publishHAMinuteur(uint32_t currentChrono, uint32_t maxTimer);
+  
 
 //static void triggerTimerEvent();
 //static void subscribeToTimerEvent(std::function<void()> callback); // Méthode pour s'abonner à l'événement

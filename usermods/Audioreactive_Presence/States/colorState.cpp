@@ -8,7 +8,7 @@ void colorState::enterState() {
     usermodPtr->_logger.Log("enter color state");
     usermodPtr->_lcdDisplay.print(usermodPtr->activeMenu->texte,0,0);
     strip.setBrightness(128);
-    
+
     // strip.trigger();  // force strip refresh
     // stateChanged = true;  // inform external devices/UI of change
     
@@ -27,4 +27,5 @@ void colorState::exitState() {
 
 void colorState::update() {
     // Logique de mise à jour pour l'état Night
+
 }

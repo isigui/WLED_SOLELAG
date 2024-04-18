@@ -15,7 +15,7 @@ class TemperatureManager {
 public:
     TemperatureManager(int dataPin, Logger& logger);
     void init();
-    void update();
+    bool update();
     TemperatureData data;
 
 private:
@@ -25,6 +25,8 @@ private:
     int dataPin;
     unsigned long delayTime;
     unsigned long startTime;
+    unsigned long lastReadTime;
+    unsigned long updateInterval;
     bool initialized;
 };
 

@@ -12,6 +12,6 @@ public:
     void update() override;
 private:
     unsigned current_time;
-    unsigned update_interval=10000;//10 secondes
+    unsigned update_interval=60000;//10 secondes
 };
 #endif //TEMPERATURESTATE_H
